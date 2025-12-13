@@ -1,356 +1,1028 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>GoPankaj — Travel</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wanderlust - Your Travel Companion</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-<!-- Basic styling + theme variables -->
-<style>
-  :root{
-    --bg: #ffffff;
-    --card: #f7f7f9;
-    --text: #111827;
-    --muted:#6b7280;
-    --accent: #0ea5a4;
-    --accent-2: #0369a1;
-    --radius: 10px;
-    --transition: 250ms ease;
-  }
-  [data-theme="dark"]{
-    --bg: #0b1220;
-    --card:#0f1724;
-    --text:#e6eef6;
-    --muted:#9aa6b2;
-    --accent: #38bdf8;
-    --accent-2: #60a5fa;
-  }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
 
-  *{box-sizing:border-box}
-  html,body{height:100%}
-  body{
-    margin:0;
-    font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-    background:var(--bg);
-    color:var(--text);
-    -webkit-font-smoothing:antialiased;
-    -moz-osx-font-smoothing:grayscale;
-    line-height:1.45;
-    transition: background var(--transition), color var(--transition);
-    padding:18px;
-  }
+        .dark-mode {
+            background-color: #0f172a;
+            color: #e2e8f0;
+        }
 
-  /* Header */
-  .header{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:12px;
-    margin-bottom:14px;
-  }
-  .brand{
-    display:flex;
-    gap:12px;
-    align-items:center;
-    text-decoration:none;
-    color:inherit;
-  }
-  .logo {
-    width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent-2));
-    display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:18px;
-    box-shadow: 0 6px 18px rgba(2,6,23,0.12);
-  }
-  h1{font-size:18px;margin:0}
-  .controls{display:flex;gap:8px;align-items:center}
+        .gradient-text {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
 
-  /* Hero */
-  .hero{
-    display:grid;
-    grid-template-columns: 1fr 360px;
-    gap:18px;
-    align-items:center;
-    margin-bottom:18px;
-  }
-  .hero-card{
-    background:var(--card); padding:18px; border-radius:var(--radius); box-shadow: 0 6px 18px rgba(2,6,23,0.05);
-    transition: transform var(--transition);
-  }
-  .hero-card:hover{ transform: translateY(-4px); }
+        .dark-mode .gradient-text {
+            background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
 
-  .hero h2{margin:0 0 8px 0;font-size:20px}
-  .cta-row{display:flex;gap:8px;margin-top:10px}
-  .btn{
-    background:var(--accent); color:white; border:none; padding:10px 14px; border-radius:8px; cursor:pointer;
-    transition: transform var(--transition), box-shadow var(--transition), opacity var(--transition);
-  }
-  .btn.secondary{ background:transparent; border:1px solid rgba(0,0,0,0.08); color:var(--text) }
+        .card-hover {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
 
-  /* Gallery */
-  .gallery{
-    margin-top:12px;
-    display:flex;
-    gap:12px;
-    overflow-x:auto;
-    padding-bottom:6px;
-    scroll-behavior:smooth;
-  }
-  .thumb{
-    min-width:250px;
-    height:150px;
-    border-radius:8px;
-    background-size:cover;
-    background-position:center;
-    flex:0 0 auto;
-    box-shadow: 0 8px 18px rgba(0,0,0,0.08);
-    transition: transform var(--transition);
-    cursor:pointer;
-  }
-  .thumb:focus, .thumb:hover{ transform: translateY(-6px) scale(1.03); outline:none; }
+        .card-hover:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
 
-  /* Sections */
-  section{margin-bottom:16px}
-  .section-title{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
-  .section-title h3{margin:0;font-size:16px}
-  .muted{color:var(--muted);font-size:13px}
+        .dark-mode .card-hover:hover {
+            box-shadow: 0 20px 40px rgba(255, 255, 255, 0.1);
+        }
 
-  /* Testimonials */
-  .testimonials{
-    display:grid;
-    grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
-    gap:12px;
-  }
-  .testimonial{
-    background:var(--card); padding:12px;border-radius:8px;
-  }
-  .quote{font-weight:600;margin-bottom:8px}
-  .author{font-size:13px;color:var(--muted)}
+        .hero-section {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.9) 0%, rgba(118, 75, 162, 0.9) 100%),
+                        url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%23667eea" fill-opacity="0.3" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,122.7C672,117,768,139,864,138.7C960,139,1056,117,1152,96C1248,75,1344,53,1392,42.7L1440,32L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>');
+            background-size: cover;
+            background-position: center;
+            min-height: 600px;
+        }
 
-  /* Contact */
-  .contact-grid{display:grid;grid-template-columns:1fr 340px; gap:12px}
-  .form-row{display:flex;gap:8px}
-  input, textarea{
-    width:100%; padding:9px;border-radius:8px;border:1px solid rgba(0,0,0,0.08);background:transparent;color:var(--text);
-  }
-  textarea{min-height:120px;resize:vertical}
+        .dark-mode .hero-section {
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.95) 100%),
+                        url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%2360a5fa" fill-opacity="0.1" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,122.7C672,117,768,139,864,138.7C960,139,1056,117,1152,96C1248,75,1344,53,1392,42.7L1440,32L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>');
+        }
 
-  /* Footer */
-  footer{
-    margin-top:18px;padding-top:10px;border-top:1px solid rgba(0,0,0,0.06);
-    display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;
-  }
-  .social a{margin-right:8px; text-decoration:none;color:var(--muted)}
+        .animate-float {
+            animation: float 3s ease-in-out infinite;
+        }
 
-  /* Responsive */
-  @media (max-width:980px){
-    .hero{grid-template-columns:1fr; }
-    .contact-grid{grid-template-columns:1fr;}
-  }
-  @media (max-width:520px){
-    .thumb{min-width:190px;height:120px}
-    body{padding:12px}
-    .logo{width:42px;height:42px;font-size:16px}
-  }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
 
-  /* Tiny helpers */
-  .small{font-size:13px}
-  .pill{display:inline-block;padding:6px 10px;border-radius:999px;background:linear-gradient(90deg,rgba(0,0,0,0.04),transparent);font-size:13px}
-</style>
+        .pulse-slow {
+            animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .slide-in-left {
+            animation: slideInLeft 0.8s ease-out;
+        }
+
+        .slide-in-right {
+            animation: slideInRight 0.8s ease-out;
+        }
+
+        .nav-glass {
+            backdrop-filter: blur(10px);
+            background-color: rgba(255, 255, 255, 0.8);
+        }
+
+        .dark-mode .nav-glass {
+            background-color: rgba(15, 23, 42, 0.8);
+        }
+
+        .search-bar {
+            backdrop-filter: blur(10px);
+            background-color: rgba(255, 255, 255, 0.95);
+        }
+
+        .dark-mode .search-bar {
+            background-color: rgba(30, 41, 59, 0.95);
+        }
+
+        .destination-card {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .destination-card img {
+            transition: transform 0.5s ease;
+        }
+
+        .destination-card:hover img {
+            transform: scale(1.1);
+        }
+
+        .overlay-gradient {
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .dark-mode .btn-primary:hover {
+            box-shadow: 0 10px 25px rgba(96, 165, 250, 0.4);
+        }
+
+        .scroll-smooth {
+            scroll-behavior: smooth;
+        }
+
+        .toggle-checkbox:checked {
+            right: 0;
+            border-color: #667eea;
+        }
+        
+        .toggle-checkbox:checked + .toggle-label {
+            background-color: #667eea;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in-up {
+            animation: fadeInUp 0.6s ease-out;
+        }
+    </style>
 </head>
-<body>
+<body class="scroll-smooth">
+    <!-- Navigation Bar -->
+    <nav class="nav-glass fixed w-full top-0 z-50 shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <!-- Logo -->
+                <div class="flex items-center space-x-2">
+                    <i class="fas fa-plane-departure text-3xl gradient-text"></i>
+                    <span class="text-2xl font-bold gradient-text">Wanderlust</span>
+                </div>
 
-<header class="header">
-  <a class="brand" href="#">
-    <div class="logo">P</div>
-    <div>
-      <h1>GoPankaj</h1>
-      <div class="small muted">Curated travel inspiration & front-end demo</div>
-    </div>
-  </a>
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#home" class="hover:text-purple-600 dark:hover:text-purple-400 transition">Home</a>
+                    <a href="#destinations" class="hover:text-purple-600 dark:hover:text-purple-400 transition">Destinations</a>
+                    <a href="#packages" class="hover:text-purple-600 dark:hover:text-purple-400 transition">Packages</a>
+                    <a href="#services" class="hover:text-purple-600 dark:hover:text-purple-400 transition">Services</a>
+                    <a href="#testimonials" class="hover:text-purple-600 dark:hover:text-purple-400 transition">Reviews</a>
+                    <a href="#contact" class="hover:text-purple-600 dark:hover:text-purple-400 transition">Contact</a>
+                </div>
 
-  <div class="controls">
-    <div class="pill small muted">Front-end • HTML/CSS/JS</div>
-    <button id="themeToggle" class="btn" title="Toggle day / night">Toggle Theme</button>
-  </div>
-</header>
-
-<!-- HERO -->
-<main>
-  <div class="hero">
-    <div class="hero-card">
-      <h2>Discover curated escapes — fast, beautiful, responsive</h2>
-      <p class="muted">GoPankaj is a front-end demo showcasing interactive UI patterns: day/night mode, gallery, testimonials, contact and responsive layouts.</p>
-      <div class="cta-row">
-        <button class="btn">Explore Destinations</button>
-        <button class="btn secondary" onclick="document.getElementById('gallery').scrollIntoView({behavior:'smooth'})">View Gallery</button>
-      </div>
-
-      <!-- Gallery preview -->
-      <div style="margin-top:12px">
-        <div class="section-title">
-          <h3>Featured destinations</h3>
-          <div class="muted small">Swipe →</div>
-        </div>
-        <div id="gallery" class="gallery" tabindex="0" aria-label="Destination gallery">
-          <div class="thumb" style="background-image:url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&q=60');" title="Maldives" role="button"></div>
-          <div class="thumb" style="background-image:url('https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=1200&q=60');" title="Santorini" role="button"></div>
-          <div class="thumb" style="background-image:url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=1200&q=60');" title="Swiss Alps" role="button"></div>
-          <div class="thumb" style="background-image:url('https://images.unsplash.com/photo-1491553895911-0055eca6402d?w=1200&q=60');" title="Bali" role="button"></div>
-          <div class="thumb" style="background-image:url('https://images.unsplash.com/photo-1491553895911-0055eca6402d?w=1200&q=60');" title="Kyoto" role="button"></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Right column: quick contact / highlights -->
-    <aside class="hero-card">
-      <div style="display:flex;justify-content:space-between;align-items:center">
-        <div>
-          <div class="small muted">Quick Info</div>
-          <div style="font-weight:700">Responsive • Accessible • Lightweight</div>
-        </div>
-      </div>
-
-      <div style="margin-top:12px">
-        <div class="small muted">Highlights</div>
-        <ul style="margin:8px 0 0 16px;padding:0">
-          <li class="small">Day / Night theme (localStorage)</li>
-          <li class="small">Scrollable gallery with smooth transitions</li>
-          <li class="small">Testimonials & Contact UI</li>
-        </ul>
-      </div>
-
-      <div style="margin-top:14px">
-        <button class="btn" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Contact Me</button>
-      </div>
-    </aside>
-  </div>
-
-  <!-- Testimonials -->
-  <section aria-labelledby="testimonials-title">
-    <div class="section-title">
-      <h3 id="testimonials-title">Traveler Reviews</h3>
-      <div class="muted small">Handpicked feedback</div>
-    </div>
-
-    <div class="testimonials">
-      <div class="testimonial">
-        <div class="quote">"The itinerary suggestions were spot-on — seamless UI and beautiful photos."</div>
-        <div class="author">— Neha K., Solo traveler</div>
-      </div>
-      <div class="testimonial">
-        <div class="quote">"Easy to navigate, the day/night option made browsing late-night planning comfortable."</div>
-        <div class="author">— Akash R., Weekend explorer</div>
-      </div>
-      <div class="testimonial">
-        <div class="quote">"Gallery and transitions felt premium — great demo of front-end skills."</div>
-        <div class="author">— Priya M., Design lead</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Contact & more gallery -->
-  <section id="contact" aria-labelledby="contact-title">
-    <div class="section-title">
-      <h3 id="contact-title">Get in touch</h3>
-      <div class="muted small">Questions, collaborations, or booking demos</div>
-    </div>
-
-    <div class="contact-grid">
-      <form class="hero-card" onsubmit="event.preventDefault(); alert('Form demo — integrate backend or email service.');">
-        <div class="form-row">
-          <input type="text" placeholder="Your name" required />
-          <input type="email" placeholder="Your email" required />
-        </div>
-        <div style="margin-top:8px">
-          <input type="text" placeholder="Subject" />
-        </div>
-        <div style="margin-top:8px">
-          <textarea placeholder="Message (tell me your travel idea)"></textarea>
-        </div>
-        <div style="margin-top:12px;display:flex;gap:8px;justify-content:flex-end">
-          <button class="btn" type="submit">Send Message</button>
-          <button class="btn secondary" type="button" onclick="this.closest('form').reset();">Clear</button>
-        </div>
-      </form>
-
-      <div class="hero-card">
-        <div class="section-title"><h3>Gallery highlights</h3><div class="muted small">Scroll to explore</div></div>
-        <div class="gallery" style="height:220px;align-items:center;">
-          <div class="thumb" style="height:200px;min-width:160px;background-image:url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&q=60');"></div>
-          <div class="thumb" style="height:200px;min-width:220px;background-image:url('https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=1200&q=60');"></div>
-          <div class="thumb" style="height:200px;min-width:200px;background-image:url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=1200&q=60');"></div>
-          <div class="thumb" style="height:200px;min-width:180px;background-image:url('https://images.unsplash.com/photo-1491553895911-0055eca6402d?w=1200&q=60');"></div>
+                <!-- Dark Mode Toggle & Menu Button -->
+                <div class="flex items-center space-x-4">
+                    <!-- Dark Mode Toggle -->
+                    <button id="themeToggle" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition">
+                        <i class="fas fa-moon text-xl" id="themeIcon"></i>
+                    </button>
+                    
+                    <!-- Mobile Menu Button -->
+                    <button id="mobileMenuBtn" class="md:hidden p-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
         </div>
 
-        <div style="margin-top:12px" class="muted small">
-          Tip: Click any image to open in a new tab.
+        <!-- Mobile Menu -->
+        <div id="mobileMenu" class="hidden md:hidden px-4 pb-4">
+            <div class="flex flex-col space-y-3">
+                <a href="#home" class="hover:text-purple-600 dark:hover:text-purple-400 transition py-2">Home</a>
+                <a href="#destinations" class="hover:text-purple-600 dark:hover:text-purple-400 transition py-2">Destinations</a>
+                <a href="#packages" class="hover:text-purple-600 dark:hover:text-purple-400 transition py-2">Packages</a>
+                <a href="#services" class="hover:text-purple-600 dark:hover:text-purple-400 transition py-2">Services</a>
+                <a href="#testimonials" class="hover:text-purple-600 dark:hover:text-purple-400 transition py-2">Reviews</a>
+                <a href="#contact" class="hover:text-purple-600 dark:hover:text-purple-400 transition py-2">Contact</a>
+            </div>
         </div>
-      </div>
-    </div>
-  </section>
+    </nav>
 
-  <!-- Footer -->
-  <footer>
-    <div>
-      <strong>GoPankaj</strong>
-      <div class="muted small">Front-end demo • HTML / CSS / JavaScript</div>
-    </div>
-    <div class="social muted">
-      <a href="#" aria-label="GitHub">GitHub</a>
-      <a href="#" aria-label="LinkedIn">LinkedIn</a>
-      <a href="#" aria-label="Email">Contact</a>
-    </div>
-  </footer>
-</main>
+    <!-- Hero Section -->
+    <section id="home" class="hero-section flex items-center justify-center text-white pt-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center">
+            <div class="slide-in-left">
+                <h1 class="text-5xl md:text-7xl font-bold mb-6">Explore the World</h1>
+                <p class="text-xl md:text-2xl mb-12 text-gray-100">Discover amazing destinations and create unforgettable memories</p>
+            </div>
 
-<!-- JavaScript: theme toggle, gallery click, accessibility -->
-<script>
-  (function(){
-    // Theme: load saved, default to system preference
-    const root = document.documentElement;
-    const toggle = document.getElementById('themeToggle');
-    const saved = localStorage.getItem('exwp-theme');
-    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+            <!-- Search Bar -->
+            <div class="search-bar max-w-4xl mx-auto rounded-2xl shadow-2xl p-6 md:p-8 slide-in-right">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div class="flex items-center space-x-3 p-3 rounded-lg bg-white dark:bg-gray-800">
+                        <i class="fas fa-map-marker-alt text-purple-600"></i>
+                        <input type="text" placeholder="Where to?" class="flex-1 outline-none bg-transparent text-gray-800 dark:text-gray-200">
+                    </div>
+                    <div class="flex items-center space-x-3 p-3 rounded-lg bg-white dark:bg-gray-800">
+                        <i class="fas fa-calendar text-purple-600"></i>
+                        <input type="date" class="flex-1 outline-none bg-transparent text-gray-800 dark:text-gray-200">
+                    </div>
+                    <div class="flex items-center space-x-3 p-3 rounded-lg bg-white dark:bg-gray-800">
+                        <i class="fas fa-users text-purple-600"></i>
+                        <select class="flex-1 outline-none bg-transparent text-gray-800 dark:text-gray-200">
+                            <option>1 Traveler</option>
+                            <option>2 Travelers</option>
+                            <option>3 Travelers</option>
+                            <option>4+ Travelers</option>
+                        </select>
+                    </div>
+                    <button class="btn-primary text-white py-3 px-6 rounded-lg font-semibold">
+                        <i class="fas fa-search mr-2"></i>Search
+                    </button>
+                </div>
+            </div>
 
-    function applyTheme(t){
-      if(t === 'dark') root.setAttribute('data-theme','dark');
-      else root.removeAttribute('data-theme');
-      localStorage.setItem('exwp-theme', t);
-      toggle.textContent = t === 'dark' ? 'Switch to Day' : 'Switch to Night';
-    }
+            <!-- Stats -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mt-16 max-w-4xl mx-auto">
+                <div class="pulse-slow">
+                    <h3 class="text-4xl font-bold">500+</h3>
+                    <p class="text-gray-200">Destinations</p>
+                </div>
+                <div class="pulse-slow" style="animation-delay: 0.2s;">
+                    <h3 class="text-4xl font-bold">10K+</h3>
+                    <p class="text-gray-200">Happy Customers</p>
+                </div>
+                <div class="pulse-slow" style="animation-delay: 0.4s;">
+                    <h3 class="text-4xl font-bold">200+</h3>
+                    <p class="text-gray-200">Travel Guides</p>
+                </div>
+                <div class="pulse-slow" style="animation-delay: 0.6s;">
+                    <h3 class="text-4xl font-bold">4.9★</h3>
+                    <p class="text-gray-200">Rating</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-    applyTheme(saved || (prefersDark ? 'dark' : 'light'));
-    toggle.addEventListener('click', () => {
-      const isDark = root.getAttribute('data-theme') === 'dark';
-      applyTheme(isDark ? 'light' : 'dark');
-    });
+    <!-- Popular Destinations -->
+    <section id="destinations" class="py-20 bg-gray-50 dark:bg-gray-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold mb-4 gradient-text">Popular Destinations</h2>
+                <p class="text-gray-600 dark:text-gray-400 text-lg">Explore the most sought-after travel spots around the globe</p>
+            </div>
 
-    // Make gallery images open in new tab when clicked (demo)
-    document.querySelectorAll('.thumb').forEach(el=>{
-      el.addEventListener('click', () => {
-        const bg = el.style.backgroundImage;
-        // Extract URL from background-image: url("...")
-        const url = bg.slice(5, -2);
-        window.open(url, '_blank');
-      });
-      // keyboard accessibility
-      el.addEventListener('keydown', (ev)=>{
-        if(ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); el.click(); }
-      });
-      el.setAttribute('tabindex','0');
-      el.style.outline = 'none';
-    });
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Destination Card 1 -->
+                <div class="destination-card card-hover rounded-2xl overflow-hidden shadow-lg bg-white dark:bg-gray-800">
+                    <div class="relative h-64">
+                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300'%3E%3Crect fill='%234facfe' width='400' height='300'/%3E%3Ctext x='50%25' y='50%25' font-size='20' text-anchor='middle' fill='white'%3EParis%3C/text%3E%3C/svg%3E" alt="Paris" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 overlay-gradient"></div>
+                        <div class="absolute bottom-0 left-0 p-6 text-white">
+                            <h3 class="text-2xl font-bold mb-2">Paris, France</h3>
+                            <p class="text-sm">From $1,299</p>
+                        </div>
+                        <div class="absolute top-4 right-4">
+                            <span class="bg-yellow-400 text-gray-900 px-3 py-1 rounded-full text-sm font-semibold">Popular</span>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center space-x-2">
+                                <i class="fas fa-clock text-purple-600"></i>
+                                <span class="text-sm text-gray-600 dark:text-gray-400">7 Days</span>
+                            </div>
+                            <div class="flex items-center space-x-1">
+                                <i class="fas fa-star text-yellow-400"></i>
+                                <span class="text-sm font-semibold">4.8</span>
+                            </div>
+                        </div>
+                        <p class="text-gray-600 dark:text-gray-400 mb-4">Experience the city of lights with guided tours</p>
+                        <button class="w-full btn-primary text-white py-2 rounded-lg font-semibold">Book Now</button>
+                    </div>
+                </div>
 
-    // Small enhancement: keyboard arrow keys scroll gallery
-    const gallery = document.getElementById('gallery');
-    if(gallery){
-      gallery.addEventListener('keydown', (e)=>{
-        if(e.key === 'ArrowRight') gallery.scrollBy({left:260, behavior:'smooth'});
-        if(e.key === 'ArrowLeft') gallery.scrollBy({left:-260, behavior:'smooth'});
-      });
-    }
+                <!-- Destination Card 2 -->
+                <div class="destination-card card-hover rounded-2xl overflow-hidden shadow-lg bg-white dark:bg-gray-800">
+                    <div class="relative h-64">
+                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300'%3E%3Crect fill='%2300f2fe' width='400' height='300'/%3E%3Ctext x='50%25' y='50%25' font-size='20' text-anchor='middle' fill='white'%3ETokyo%3C/text%3E%3C/svg%3E" alt="Tokyo" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 overlay-gradient"></div>
+                        <div class="absolute bottom-0 left-0 p-6 text-white">
+                            <h3 class="text-2xl font-bold mb-2">Tokyo, Japan</h3>
+                            <p class="text-sm">From $1,599</p>
+                        </div>
+                        <div class="absolute top-4 right-4">
+                            <span class="bg-green-400 text-gray-900 px-3 py-1 rounded-full text-sm font-semibold">New</span>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center space-x-2">
+                                <i class="fas fa-clock text-purple-600"></i>
+                                <span class="text-sm text-gray-600 dark:text-gray-400">10 Days</span>
+                            </div>
+                            <div class="flex items-center space-x-1">
+                                <i class="fas fa-star text-yellow-400"></i>
+                                <span class="text-sm font-semibold">4.9</span>
+                            </div>
+                        </div>
+                        <p class="text-gray-600 dark:text-gray-400 mb-4">Discover ancient traditions meets modern innovation</p>
+                        <button class="w-full btn-primary text-white py-2 rounded-lg font-semibold">Book Now</button>
+                    </div>
+                </div>
 
-    // Link the gallery images to a lightbox-like experience could be added later.
-  })();
-</script>
+                <!-- Destination Card 3 -->
+                <div class="destination-card card-hover rounded-2xl overflow-hidden shadow-lg bg-white dark:bg-gray-800">
+                    <div class="relative h-64">
+                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300'%3E%3Crect fill='%23fa709a' width='400' height='300'/%3E%3Ctext x='50%25' y='50%25' font-size='20' text-anchor='middle' fill='white'%3EBali%3C/text%3E%3C/svg%3E" alt="Bali" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 overlay-gradient"></div>
+                        <div class="absolute bottom-0 left-0 p-6 text-white">
+                            <h3 class="text-2xl font-bold mb-2">Bali, Indonesia</h3>
+                            <p class="text-sm">From $899</p>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center space-x-2">
+                                <i class="fas fa-clock text-purple-600"></i>
+                                <span class="text-sm text-gray-600 dark:text-gray-400">6 Days</span>
+                            </div>
+                            <div class="flex items-center space-x-1">
+                                <i class="fas fa-star text-yellow-400"></i>
+                                <span class="text-sm font-semibold">4.7</span>
+                            </div>
+                        </div>
+                        <p class="text-gray-600 dark:text-gray-400 mb-4">Tropical paradise with stunning beaches and culture</p>
+                        <button class="w-full btn-primary text-white py-2 rounded-lg font-semibold">Book Now</button>
+                    </div>
+                </div>
+
+                <!-- Destination Card 4 -->
+                <div class="destination-card card-hover rounded-2xl overflow-hidden shadow-lg bg-white dark:bg-gray-800">
+                    <div class="relative h-64">
+                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300'%3E%3Crect fill='%23fbc2eb' width='400' height='300'/%3E%3Ctext x='50%25' y='50%25' font-size='20' text-anchor='middle' fill='white'%3ESantorini%3C/text%3E%3C/svg%3E" alt="Santorini" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 overlay-gradient"></div>
+                        <div class="absolute bottom-0 left-0 p-6 text-white">
+                            <h3 class="text-2xl font-bold mb-2">Santorini, Greece</h3>
+                            <p class="text-sm">From $1,399</p>
+                        </div>
+                        <div class="absolute top-4 right-4">
+                            <span class="bg-red-400 text-white px-3 py-1 rounded-full text-sm font-semibold">Hot Deal</span>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center space-x-2">
+                                <i class="fas fa-clock text-purple-600"></i>
+                                <span class="text-sm text-gray-600 dark:text-gray-400">5 Days</span>
+                            </div>
+                            <div class="flex items-center space-x-1">
+                                <i class="fas fa-star text-yellow-400"></i>
+                                <span class="text-sm font-semibold">5.0</span>
+                            </div>
+                        </div>
+                        <p class="text-gray-600 dark:text-gray-400 mb-4">White-washed villages and breathtaking sunsets</p>
+                        <button class="w-full btn-primary text-white py-2 rounded-lg font-semibold">Book Now</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Travel Packages -->
+    <section id="packages" class="py-20 bg-white dark:bg-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold mb-4 gradient-text">Special Packages</h2>
+                <p class="text-gray-600 dark:text-gray-400 text-lg">Curated travel experiences at unbeatable prices</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Package 1 -->
+                <div class="card-hover rounded-2xl overflow-hidden shadow-xl bg-gradient-to-br from-blue-500 to-purple-600 text-white">
+                    <div class="p-8">
+                        <div class="text-center mb-6">
+                            <i class="fas fa-plane text-5xl mb-4"></i>
+                            <h3 class="text-3xl font-bold mb-2">Adventure</h3>
+                            <p class="text-blue-100">For thrill seekers</p>
+                        </div>
+                        <div class="text-center mb-6">
+                            <span class="text-5xl font-bold">$999</span>
+                            <span class="text-xl">/person</span>
+                        </div>
+                        <ul class="space-y-3 mb-8">
+                            <li class="flex items-center">
+                                <i class="fas fa-check-circle mr-3"></i>
+                                <span>Mountain trekking</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check-circle mr-3"></i>
+                                <span>White water rafting</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check-circle mr-3"></i>
+                                <span>Rock climbing</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check-circle mr-3"></i>
+                                <span>Professional guide</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check-circle mr-3"></i>
+                                <span>All equipment included</span>
+                            </li>
+                        </ul>
+                        <button class="w-full bg-white text-purple-600 py-3 rounded-lg font-semibold hover:bg-gray-100 transition">Choose Plan</button>
+                    </div>
+                </div>
+
+                <!-- Package 2 -->
+                <div class="card-hover rounded-2xl overflow-hidden shadow-xl bg-gradient-to-br from-pink-500 to-orange-500 text-white transform scale-105">
+                    <div class="relative">
+                        <div class="absolute top-0 right-0 bg-yellow-400 text-gray-900 px-4 py-2 rounded-bl-2xl font-bold">
+                            POPULAR
+                        </div>
+                    </div>
+                    <div class="p-8">
+                        <div class="text-center mb-6">
+                            <i class="fas fa-umbrella-beach text-5xl mb-4"></i>
+                            <h3 class="text-3xl font-bold mb-2">Relaxation</h3>
+                            <p class="text-orange-100">Beach & spa paradise</p>
+                        </div>
+                        <div class="text-center mb-6">
+                            <span class="text-5xl font-bold">$1,499</span>
+                            <span class="text-xl">/person</span>
+                        </div>
+                        <ul class="space-y-3 mb-8">
+                            <li class="flex items-center">
+                                <i class="fas fa-check-circle mr-3"></i>
+                                <span>5-star resort stay</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check-circle mr-3"></i>
+                                <span>Daily spa treatments</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check-circle mr-3"></i>
+                                <span>Private beach access</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check-circle mr-3"></i>
+                                <span>Gourmet dining</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check-circle mr-3"></i>
+                                <span>Yoga & meditation</span>
+                            </li>
+                        </ul>
+                        <button class="w-full bg-white text-orange-600 py-3 rounded-lg font-semibold hover:bg-gray-100 transition">Choose Plan</button>
+                    </div>
+                </div>
+
+                <!-- Package 3 -->
+                <div class="card-hover rounded-2xl overflow-hidden shadow-xl bg-gradient-to-br from-green-500 to-teal-600 text-white">
+                    <div class="p-8">
+                        <div class="text-center mb-6">
+                            <i class="fas fa-city text-5xl mb-4"></i>
+                            <h3 class="text-3xl font-bold mb-2">Cultural</h3>
+                            <p class="text-green-100">Heritage exploration</p>
+                        </div>
+                        <div class="text-center mb-6">
+                            <span class="text-5xl font-bold">$1,299</span>
+                            <span class="text-xl">/person</span>
+                        </div>
+                        <ul class="space-y-3 mb-8">
+                            <li class="flex items-center">
+                                <i class="fas fa-check-circle mr-3"></i>
+                                <span>Museum tours</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check-circle mr-3"></i>
+                                <span>Historical sites</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check-circle mr-3"></i>
+                                <span>Local cuisine tasting</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check-circle mr-3"></i>
+                                <span>Cultural workshops</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check-circle mr-3"></i>
+                                <span>Expert historian guide</span>
+                            </li>
+                        </ul>
+                        <button class="w-full bg-white text-teal-600 py-3 rounded-lg font-semibold hover:bg-gray-100 transition">Choose Plan</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services -->
+    <section id="services" class="py-20 bg-gray-50 dark:bg-gray-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold mb-4 gradient-text">Our Services</h2>
+                <p class="text-gray-600 dark:text-gray-400 text-lg">Everything you need for a perfect journey</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="card-hover bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg text-center">
+                    <div class="bg-gradient-to-br from-blue-400 to-blue-600 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-hotel text-3xl text-white"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Hotel Booking</h3>
+                    <p class="text-gray-600 dark:text-gray-400">Premium hotels at the best prices worldwide</p>
+                </div>
+
+                <div class="card-hover bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg text-center">
+                    <div class="bg-gradient-to-br from-purple-400 to-purple-600 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-plane-departure text-3xl text-white"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Flight Tickets</h3>
+                    <p class="text-gray-600 dark:text-gray-400">Compare and book flights from major airlines</p>
+                </div>
+
+                <div class="card-hover bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg text-center">
+                    <div class="bg-gradient-to-br from-pink-400 to-pink-600 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-map-marked-alt text-3xl text-white"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Tour Packages</h3>
+                    <p class="text-gray-600 dark:text-gray-400">Curated experiences with local guides</p>
+                </div>
+
+                <div class="card-hover bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg text-center">
+                    <div class="bg-gradient-to-br from-green-400 to-green-600 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-headset text-3xl text-white"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">24/7 Support</h3>
+                    <p class="text-gray-600 dark:text-gray-400">Round-the-clock customer assistance</p>
+                </div>
+
+                <div class="card-hover bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg text-center">
+                    <div class="bg-gradient-to-br from-yellow-400 to-yellow-600 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-car text-3xl text-white"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Car Rentals</h3>
+                    <p class="text-gray-600 dark:text-gray-400">Flexible car rental options at your destination</p>
+                </div>
+
+                <div class="card-hover bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg text-center">
+                    <div class="bg-gradient-to-br from-red-400 to-red-600 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-shield-alt text-3xl text-white"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Travel Insurance</h3>
+                    <p class="text-gray-600 dark:text-gray-400">Comprehensive coverage for peace of mind</p>
+                </div>
+
+                <div class="card-hover bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg text-center">
+                    <div class="bg-gradient-to-br from-indigo-400 to-indigo-600 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-passport text-3xl text-white"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Visa Assistance</h3>
+                    <p class="text-gray-600 dark:text-gray-400">Expert help with visa applications</p>
+                </div>
+
+                <div class="card-hover bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg text-center">
+                    <div class="bg-gradient-to-br from-teal-400 to-teal-600 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-camera text-3xl text-white"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Photography</h3>
+                    <p class="text-gray-600 dark:text-gray-400">Professional travel photography services</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section id="testimonials" class="py-20 bg-white dark:bg-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold mb-4 gradient-text">What Travelers Say</h2>
+                <p class="text-gray-600 dark:text-gray-400 text-lg">Real experiences from our amazing customers</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Testimonial 1 -->
+                <div class="card-hover bg-gray-50 dark:bg-gray-900 p-8 rounded-2xl shadow-lg">
+                    <div class="flex items-center mb-4">
+                        <div class="w-16 h-16 rounded-full bg-gradient-to-br from-purple-400 to-pink-400 flex items-center justify-center text-white text-2xl font-bold">
+                            JD
+                        </div>
+                        <div class="ml-4">
+                            <h4 class="font-bold text-lg">John Doe</h4>
+                            <div class="flex text-yellow-400">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-400 italic">"Amazing experience! The tour was well organized, and our guide was incredibly knowledgeable. Would definitely recommend Wanderlust to anyone looking for an unforgettable adventure."</p>
+                </div>
+
+                <!-- Testimonial 2 -->
+                <div class="card-hover bg-gray-50 dark:bg-gray-900 p-8 rounded-2xl shadow-lg">
+                    <div class="flex items-center mb-4">
+                        <div class="w-16 h-16 rounded-full bg-gradient-to-br from-blue-400 to-teal-400 flex items-center justify-center text-white text-2xl font-bold">
+                            SM
+                        </div>
+                        <div class="ml-4">
+                            <h4 class="font-bold text-lg">Sarah Miller</h4>
+                            <div class="flex text-yellow-400">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-400 italic">"Best vacation ever! Everything was perfect from start to finish. The attention to detail and customer service exceeded all expectations. Thank you for making our honeymoon so special!"</p>
+                </div>
+
+                <!-- Testimonial 3 -->
+                <div class="card-hover bg-gray-50 dark:bg-gray-900 p-8 rounded-2xl shadow-lg">
+                    <div class="flex items-center mb-4">
+                        <div class="w-16 h-16 rounded-full bg-gradient-to-br from-green-400 to-yellow-400 flex items-center justify-center text-white text-2xl font-bold">
+                            MC
+                        </div>
+                        <div class="ml-4">
+                            <h4 class="font-bold text-lg">Mike Chen</h4>
+                            <div class="flex text-yellow-400">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-400 italic">"Professional, reliable, and affordable! Wanderlust made planning my trip so easy. The package deals are incredible value for money. Already planning my next adventure with them!"</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter -->
+    <section class="py-20 bg-gradient-to-r from-purple-600 to-pink-600 text-white">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <i class="fas fa-envelope text-6xl mb-6 animate-float"></i>
+            <h2 class="text-4xl md:text-5xl font-bold mb-4">Get Travel Inspiration</h2>
+            <p class="text-xl mb-8">Subscribe to our newsletter for exclusive deals and travel tips</p>
+            <div class="flex flex-col md:flex-row gap-4 max-w-2xl mx-auto">
+                <input type="email" placeholder="Enter your email" class="flex-1 px-6 py-4 rounded-lg text-gray-800 outline-none">
+                <button class="bg-white text-purple-600 px-8 py-4 rounded-lg font-semibold hover:bg-gray-100 transition">Subscribe</button>
+            </div>
+            <p class="text-sm mt-4 text-purple-100">Join 50,000+ travelers getting weekly updates</p>
+        </div>
+    </section>
+
+    <!-- Contact -->
+    <section id="contact" class="py-20 bg-gray-50 dark:bg-gray-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold mb-4 gradient-text">Get In Touch</h2>
+                <p class="text-gray-600 dark:text-gray-400 text-lg">We're here to help you plan your perfect trip</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <!-- Contact Info -->
+                <div class="space-y-8">
+                    <div class="flex items-start space-x-4">
+                        <div class="bg-gradient-to-br from-purple-400 to-purple-600 w-14 h-14 rounded-full flex items-center justify-center flex-shrink-0">
+                            <i class="fas fa-map-marker-alt text-white text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-xl mb-2">Visit Us</h3>
+                            <p class="text-gray-600 dark:text-gray-400">123 Travel Street, Adventure City, AC 12345</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start space-x-4">
+                        <div class="bg-gradient-to-br from-blue-400 to-blue-600 w-14 h-14 rounded-full flex items-center justify-center flex-shrink-0">
+                            <i class="fas fa-phone text-white text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-xl mb-2">Call Us</h3>
+                            <p class="text-gray-600 dark:text-gray-400">+1 (555) 123-4567</p>
+                            <p class="text-gray-600 dark:text-gray-400">Mon-Fri: 9AM - 6PM</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start space-x-4">
+                        <div class="bg-gradient-to-br from-pink-400 to-pink-600 w-14 h-14 rounded-full flex items-center justify-center flex-shrink-0">
+                            <i class="fas fa-envelope text-white text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-xl mb-2">Email Us</h3>
+                            <p class="text-gray-600 dark:text-gray-400">info@wanderlust.com</p>
+                            <p class="text-gray-600 dark:text-gray-400">support@wanderlust.com</p>
+                        </div>
+                    </div>
+
+                    <div class="pt-8">
+                        <h3 class="font-bold text-xl mb-4">Follow Us</h3>
+                        <div class="flex space-x-4">
+                            <a href="#" class="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white hover:scale-110 transition">
+                                <i class="fab fa-facebook-f"></i>
+                            </a>
+                            <a href="#" class="w-12 h-12 rounded-full bg-gradient-to-br from-pink-500 to-pink-600 flex items-center justify-center text-white hover:scale-110 transition">
+                                <i class="fab fa-instagram"></i>
+                            </a>
+                            <a href="#" class="w-12 h-12 rounded-full bg-gradient-to-br from-blue-400 to-blue-500 flex items-center justify-center text-white hover:scale-110 transition">
+                                <i class="fab fa-twitter"></i>
+                            </a>
+                            <a href="#" class="w-12 h-12 rounded-full bg-gradient-to-br from-red-500 to-red-600 flex items-center justify-center text-white hover:scale-110 transition">
+                                <i class="fab fa-youtube"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contact Form -->
+                <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-xl">
+                    <form class="space-y-6">
+                        <div>
+                            <label class="block text-sm font-semibold mb-2">Full Name</label>
+                            <input type="text" class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 outline-none focus:border-purple-500" placeholder="John Doe">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold mb-2">Email</label>
+                            <input type="email" class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 outline-none focus:border-purple-500" placeholder="john@example.com">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold mb-2">Phone</label>
+                            <input type="tel" class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 outline-none focus:border-purple-500" placeholder="+1 (555) 000-0000">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold mb-2">Message</label>
+                            <textarea rows="4" class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 outline-none focus:border-purple-500" placeholder="Tell us about your dream destination..."></textarea>
+                        </div>
+                        <button type="submit" class="w-full btn-primary text-white py-3 rounded-lg font-semibold">Send Message</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+                <div>
+                    <div class="flex items-center space-x-2 mb-4">
+                        <i class="fas fa-plane-departure text-2xl text-purple-400"></i>
+                        <span class="text-xl font-bold">Wanderlust</span>
+                    </div>
+                    <p class="text-gray-400">Your trusted travel companion for unforgettable adventures around the world.</p>
+                </div>
+
+                <div>
+                    <h4 class="font-bold text-lg mb-4">Quick Links</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="#home" class="hover:text-purple-400 transition">Home</a></li>
+                        <li><a href="#destinations" class="hover:text-purple-400 transition">Destinations</a></li>
+                        <li><a href="#packages" class="hover:text-purple-400 transition">Packages</a></li>
+                        <li><a href="#contact" class="hover:text-purple-400 transition">Contact</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-bold text-lg mb-4">Support</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="#" class="hover:text-purple-400 transition">Help Center</a></li>
+                        <li><a href="#" class="hover:text-purple-400 transition">Terms of Service</a></li>
+                        <li><a href="#" class="hover:text-purple-400 transition">Privacy Policy</a></li>
+                        <li><a href="#" class="hover:text-purple-400 transition">FAQ</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-bold text-lg mb-4">Payment Methods</h4>
+                    <div class="flex flex-wrap gap-2">
+                        <i class="fab fa-cc-visa text-3xl text-gray-400"></i>
+                        <i class="fab fa-cc-mastercard text-3xl text-gray-400"></i>
+                        <i class="fab fa-cc-paypal text-3xl text-gray-400"></i>
+                        <i class="fab fa-cc-amex text-3xl text-gray-400"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="border-t border-gray-800 pt-8 text-center text-gray-400">
+                <p>&copy; 2024 Wanderlust. All rights reserved. Made with <i class="fas fa-heart text-red-500"></i> for travelers</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scroll to Top Button -->
+    <button id="scrollTop" class="fixed bottom-8 right-8 bg-gradient-to-br from-purple-600 to-pink-600 text-white w-12 h-12 rounded-full shadow-lg hover:scale-110 transition hidden z-40">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <script>
+        // Dark Mode Toggle
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = document.getElementById('themeIcon');
+        const body = document.body;
+
+        // Check for saved theme preference
+        const currentTheme = localStorage.getItem('theme') || 'light';
+        if (currentTheme === 'dark') {
+            body.classList.add('dark-mode');
+            themeIcon.classList.remove('fa-moon');
+            themeIcon.classList.add('fa-sun');
+        }
+
+        themeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+            
+            if (body.classList.contains('dark-mode')) {
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                themeIcon.classList.remove('fa-sun');
+                themeIcon.classList.add('fa-moon');
+                localStorage.setItem('theme', 'light');
+            }
+        });
+
+        // Mobile Menu Toggle
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Close mobile menu when clicking on a link
+        const mobileLinks = mobileMenu.querySelectorAll('a');
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+
+        // Scroll to Top Button
+        const scrollTopBtn = document.getElementById('scrollTop');
+
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                scrollTopBtn.classList.remove('hidden');
+            } else {
+                scrollTopBtn.classList.add('hidden');
+            }
+        });
+
+        scrollTopBtn.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Animate elements on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe all cards and sections
+        document.querySelectorAll('.card-hover, .destination-card').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(el);
+        });
+
+        // Add loading animation to buttons
+        document.querySelectorAll('button').forEach(button => {
+            if (button.textContent.includes('Book') || button.textContent.includes('Choose')) {
+                button.addEventListener('click', function(e) {
+                    if (!this.classList.contains('loading')) {
+                        const originalText = this.innerHTML;
+                        this.classList.add('loading');
+                        this.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Processing...';
+                        
+                        setTimeout(() => {
+                            this.innerHTML = '<i class="fas fa-check mr-2"></i>Success!';
+                            setTimeout(() => {
+                                this.innerHTML = originalText;
+                                this.classList.remove('loading');
+                            }, 1500);
+                        }, 2000);
+                    }
+                });
+            }
+        });
+
+        // Parallax effect for hero section
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const heroSection = document.querySelector('.hero-section');
+            if (heroSection) {
+                heroSection.style.transform = `translateY(${scrolled * 0.5}px)`;
+            }
+        });
+
+        // Add ripple effect to buttons
+        document.querySelectorAll('.btn-primary').forEach(button => {
+            button.addEventListener('click', function(e) {
+                const ripple = document.createElement('span');
+                const rect = this.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                ripple.style.cssText = `
+                    position: absolute;
+                    background: rgba(255, 255, 255, 0.5);
+                    border-radius: 50%;
+                    width: 100px;
+                    height: 100px;
+                    margin-left: -50px;
+                    margin-top: -50px;
+                    left: ${x}px;
+                    top: ${y}px;
+                    animation: ripple 0.6s;
+                    pointer-events: none;
+                `;
+                
+                this.style.position = 'relative';
+                this.style.overflow = 'hidden';
+                this.appendChild(ripple);
+                
+                setTimeout(() => ripple.remove(), 600);
+            });
+        });
+
+        // Added CSS for ripple animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes ripple {
+                from {
+                    transform: scale(0);
+                    opacity: 1;
+                }
+                to {
+                    transform: scale(4);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
 </body>
 </html>
